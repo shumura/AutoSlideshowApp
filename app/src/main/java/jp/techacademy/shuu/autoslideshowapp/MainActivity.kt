@@ -15,8 +15,14 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+
+
+
+
+
     private val PERMISSIONS_REQUEST_CODE = 100
     var mcursor : Cursor? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,60 +45,28 @@ class MainActivity : AppCompatActivity() {
             getContentsInfo()
         }
 
-        button1.setOnClickListener(){
-
-
-
+        button1.setOnClickListener{
             if (mcursor!!.moveToNext()) {
-                val fieldIndex = mcursor?.getColumnIndex(MediaStore.Images.Media._ID)
-                val id = mcursor?.getLong(fieldIndex)
-                val imageUri =
-                    ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-
-                imageView.setImageURI(imageUri)
-            } else {
-                mcursor?.moveToFirst()
-            }
-
-        }
-
-        button2.setOnClickListener(){
-            if(mcursor!!.moveToPrevious()){
-                val fieldIndex = mcursor?.getColumnIndex(MediaStore.Images.Media._ID)
-                val id = mcursor?.getLong(fieldIndex)
+                // indexからIDを取得し、そのIDから画像のURIを取得する
+                val fieldIndex = mcursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+                val id = mcursor!!.getLong(fieldIndex)
                 val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
                 imageView.setImageURI(imageUri)
+
             }else{
-                mcursor?.moveToLast()
+                mcursor!!.moveToFirst()
+
+                val fieldIndex = mcursor!!.getColumnIndex(MediaStore.Images.Media._ID)
+                val id = mcursor!!.getLong(fieldIndex)
+                val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+
+                imageView.setImageURI(imageUri)
             }
-
-            private var mTimer: Timer? = null
-
-            button3.setOnClickListener(){
-                mTimer = Timer()
-                mTimer!!.schedule(object : TimerTask() {
-                    override fun run() {
-
-                            val fieldIndex = mcursor?.getColumnIndex(MediaStore.Images.Media._ID)
-                            val id = mcursor?.getLong(fieldIndex)
-                            val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-
-                            imageView.setImageURI(imageUri)
-
-
-
-
-                    }
-                }, 2000, 2000) // 最初に始動させるまで 100ミリ秒、ループの間隔を 100ミリ秒 に設定
-
-                button1.isClickable = false
-                button2.isClickable = false
-                
-                button3.text = "停止"
-            }
+            mcursor!!.close()
         }
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             PERMISSIONS_REQUEST_CODE ->
