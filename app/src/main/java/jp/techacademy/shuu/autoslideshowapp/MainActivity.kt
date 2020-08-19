@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        button2.setOnClickListener{
+        button2.setOnClickListener {
             if (mcursor != null) {
                 if (mcursor!!.moveToPrevious()) {
                     // indexからIDを取得し、そのIDから画像のURIを取得する
@@ -95,41 +95,45 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        var mTimer: Timer? = null
-        var mTimerSec = 0.0
 
-        button3.setOnClickListener{
+
+
+        button3.setOnClickListener {
+
+            var mTimer: Timer? = null
+            var mTimerSec = 0.0
+
             if (mTimer == null){
                 mTimer = Timer()
                 mTimer!!.schedule(object : TimerTask() {
                     override fun run() {
                         mTimerSec += 0.1
                         mcursor!!.moveToNext()
-                        if(mcursor!!.moveToNext()){
 
-                            val fieldIndex = mcursor!!.getColumnIndex(MediaStore.Images.Media._ID)
-                            val id = mcursor!!.getLong(fieldIndex)
-                            val imageUri =
-                                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-
-                            imageView.setImageURI(imageUri)
-                        }
-                        mcursor!!.close()
                     }
                 }, 2000, 2000) // 最初に始動させるまで 100ミリ秒、ループの間隔を 100ミリ秒 に設定
+
+
+
+                button1.isClickable = false
+                button2.isClickable = false
+
+                Log.d("UI_PARTS", "停止")}
+             else{
+                mTimer!!.cancel()
+
+                button1.isClickable = true
+                button2.isClickable = true
+
+
+                Log.d("UI_PARTS", "再生")}
             }
-            button1.isClickable = false
-            button2.isClickable = false
-
-            Log.d("UI_PARTS", "停止")
 
 
-        }
 
-        button3.setOnClickListener{
 
-            
-        }
+
+
 
 
     }
