@@ -108,7 +108,9 @@ class MainActivity : AppCompatActivity() {
                 mTimer!!.schedule(object : TimerTask() {
                     override fun run() {
                         mTimerSec += 0.1
+
                         mcursor!!.moveToNext()
+
 
                     }
                 }, 2000, 2000) // 最初に始動させるまで 100ミリ秒、ループの間隔を 100ミリ秒 に設定
@@ -167,8 +169,14 @@ class MainActivity : AppCompatActivity() {
 
                 imageView.setImageURI(imageUri)
             }
-            cursor.close()
+            mcursor = cursor!!
+
+            fun onDestroy() {
+                cursor.close()
+            }
+
         }
+
 
 
 
